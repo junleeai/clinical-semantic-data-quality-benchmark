@@ -1,0 +1,669 @@
+{
+  "dataset": "MIMIC-IV Clinical Database Demo v2.2 (doi:10.13026/dp1f-ex47)",
+  "patient_table_count": 100,
+  "overview": [
+    {
+      "itemid": 50912,
+      "analyte": "Creatinine",
+      "dictionary_label": "Creatinine",
+      "fluid": "Blood",
+      "category": "Chemistry",
+      "expected_source_unit": "mg/dL",
+      "observations": 3003,
+      "valid_numeric_observations": 3003,
+      "nonfinite_numeric": 0,
+      "patients_with_observations": 100,
+      "patients_with_numeric": 100,
+      "numeric_with_expected_unit": 3003,
+      "patients_numeric_with_expected_unit": 100,
+      "rows_without_matching_patient": 0,
+      "min_per_patient": 2,
+      "q1_per_patient": 7.0,
+      "median_per_patient": 14.5,
+      "mean_per_patient": 30.03,
+      "q3_per_patient": 28.25,
+      "max_per_patient": 233,
+      "patients_with_one_measurement": 0,
+      "pct_measurements_top_10_patients": 45.75
+    },
+    {
+      "itemid": 50931,
+      "analyte": "Glucose",
+      "dictionary_label": "Glucose",
+      "fluid": "Blood",
+      "category": "Chemistry",
+      "expected_source_unit": "mg/dL",
+      "observations": 2711,
+      "valid_numeric_observations": 2711,
+      "nonfinite_numeric": 0,
+      "patients_with_observations": 100,
+      "patients_with_numeric": 100,
+      "numeric_with_expected_unit": 2711,
+      "patients_numeric_with_expected_unit": 100,
+      "rows_without_matching_patient": 0,
+      "min_per_patient": 2,
+      "q1_per_patient": 6.75,
+      "median_per_patient": 12.0,
+      "mean_per_patient": 27.11,
+      "q3_per_patient": 26.5,
+      "max_per_patient": 216,
+      "patients_with_one_measurement": 0,
+      "pct_measurements_top_10_patients": 45.41
+    },
+    {
+      "itemid": 50971,
+      "analyte": "Potassium",
+      "dictionary_label": "Potassium",
+      "fluid": "Blood",
+      "category": "Chemistry",
+      "expected_source_unit": "mEq/L",
+      "observations": 3022,
+      "valid_numeric_observations": 3019,
+      "nonfinite_numeric": 0,
+      "patients_with_observations": 100,
+      "patients_with_numeric": 100,
+      "numeric_with_expected_unit": 3019,
+      "patients_numeric_with_expected_unit": 100,
+      "rows_without_matching_patient": 0,
+      "min_per_patient": 2,
+      "q1_per_patient": 8.0,
+      "median_per_patient": 15.0,
+      "mean_per_patient": 30.22,
+      "q3_per_patient": 28.0,
+      "max_per_patient": 236,
+      "patients_with_one_measurement": 0,
+      "pct_measurements_top_10_patients": 44.67
+    },
+    {
+      "itemid": 50983,
+      "analyte": "Sodium",
+      "dictionary_label": "Sodium",
+      "fluid": "Blood",
+      "category": "Chemistry",
+      "expected_source_unit": "mEq/L",
+      "observations": 3007,
+      "valid_numeric_observations": 3007,
+      "nonfinite_numeric": 0,
+      "patients_with_observations": 100,
+      "patients_with_numeric": 100,
+      "numeric_with_expected_unit": 3007,
+      "patients_numeric_with_expected_unit": 100,
+      "rows_without_matching_patient": 0,
+      "min_per_patient": 2,
+      "q1_per_patient": 8.0,
+      "median_per_patient": 15.0,
+      "mean_per_patient": 30.07,
+      "q3_per_patient": 28.0,
+      "max_per_patient": 227,
+      "patients_with_one_measurement": 0,
+      "pct_measurements_top_10_patients": 44.43
+    }
+  ],
+  "missingness": [
+    {
+      "itemid": 50912,
+      "field": "charttime",
+      "missing_observations": 0,
+      "observations": 3003,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50912,
+      "field": "comments",
+      "missing_observations": 2963,
+      "observations": 3003,
+      "pct_missing": 98.67
+    },
+    {
+      "itemid": 50912,
+      "field": "flag",
+      "missing_observations": 1726,
+      "observations": 3003,
+      "pct_missing": 57.48
+    },
+    {
+      "itemid": 50912,
+      "field": "hadm_id",
+      "missing_observations": 637,
+      "observations": 3003,
+      "pct_missing": 21.21
+    },
+    {
+      "itemid": 50912,
+      "field": "itemid",
+      "missing_observations": 0,
+      "observations": 3003,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50912,
+      "field": "labevent_id",
+      "missing_observations": 0,
+      "observations": 3003,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50912,
+      "field": "order_provider_id",
+      "missing_observations": 2599,
+      "observations": 3003,
+      "pct_missing": 86.55
+    },
+    {
+      "itemid": 50912,
+      "field": "priority",
+      "missing_observations": 0,
+      "observations": 3003,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50912,
+      "field": "ref_range_lower",
+      "missing_observations": 0,
+      "observations": 3003,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50912,
+      "field": "ref_range_upper",
+      "missing_observations": 0,
+      "observations": 3003,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50912,
+      "field": "specimen_id",
+      "missing_observations": 0,
+      "observations": 3003,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50912,
+      "field": "storetime",
+      "missing_observations": 0,
+      "observations": 3003,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50912,
+      "field": "subject_id",
+      "missing_observations": 0,
+      "observations": 3003,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50912,
+      "field": "value",
+      "missing_observations": 0,
+      "observations": 3003,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50912,
+      "field": "valuenum",
+      "missing_observations": 0,
+      "observations": 3003,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50912,
+      "field": "valueuom",
+      "missing_observations": 0,
+      "observations": 3003,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50931,
+      "field": "charttime",
+      "missing_observations": 0,
+      "observations": 2711,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50931,
+      "field": "comments",
+      "missing_observations": 0,
+      "observations": 2711,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50931,
+      "field": "flag",
+      "missing_observations": 643,
+      "observations": 2711,
+      "pct_missing": 23.72
+    },
+    {
+      "itemid": 50931,
+      "field": "hadm_id",
+      "missing_observations": 407,
+      "observations": 2711,
+      "pct_missing": 15.01
+    },
+    {
+      "itemid": 50931,
+      "field": "itemid",
+      "missing_observations": 0,
+      "observations": 2711,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50931,
+      "field": "labevent_id",
+      "missing_observations": 0,
+      "observations": 2711,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50931,
+      "field": "order_provider_id",
+      "missing_observations": 2529,
+      "observations": 2711,
+      "pct_missing": 93.29
+    },
+    {
+      "itemid": 50931,
+      "field": "priority",
+      "missing_observations": 0,
+      "observations": 2711,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50931,
+      "field": "ref_range_lower",
+      "missing_observations": 0,
+      "observations": 2711,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50931,
+      "field": "ref_range_upper",
+      "missing_observations": 0,
+      "observations": 2711,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50931,
+      "field": "specimen_id",
+      "missing_observations": 0,
+      "observations": 2711,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50931,
+      "field": "storetime",
+      "missing_observations": 0,
+      "observations": 2711,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50931,
+      "field": "subject_id",
+      "missing_observations": 0,
+      "observations": 2711,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50931,
+      "field": "value",
+      "missing_observations": 0,
+      "observations": 2711,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50931,
+      "field": "valuenum",
+      "missing_observations": 0,
+      "observations": 2711,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50931,
+      "field": "valueuom",
+      "missing_observations": 0,
+      "observations": 2711,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50971,
+      "field": "charttime",
+      "missing_observations": 0,
+      "observations": 3022,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50971,
+      "field": "comments",
+      "missing_observations": 2766,
+      "observations": 3022,
+      "pct_missing": 91.53
+    },
+    {
+      "itemid": 50971,
+      "field": "flag",
+      "missing_observations": 2708,
+      "observations": 3022,
+      "pct_missing": 89.61
+    },
+    {
+      "itemid": 50971,
+      "field": "hadm_id",
+      "missing_observations": 561,
+      "observations": 3022,
+      "pct_missing": 18.56
+    },
+    {
+      "itemid": 50971,
+      "field": "itemid",
+      "missing_observations": 0,
+      "observations": 3022,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50971,
+      "field": "labevent_id",
+      "missing_observations": 0,
+      "observations": 3022,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50971,
+      "field": "order_provider_id",
+      "missing_observations": 2686,
+      "observations": 3022,
+      "pct_missing": 88.88
+    },
+    {
+      "itemid": 50971,
+      "field": "priority",
+      "missing_observations": 0,
+      "observations": 3022,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50971,
+      "field": "ref_range_lower",
+      "missing_observations": 0,
+      "observations": 3022,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50971,
+      "field": "ref_range_upper",
+      "missing_observations": 0,
+      "observations": 3022,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50971,
+      "field": "specimen_id",
+      "missing_observations": 0,
+      "observations": 3022,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50971,
+      "field": "storetime",
+      "missing_observations": 0,
+      "observations": 3022,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50971,
+      "field": "subject_id",
+      "missing_observations": 0,
+      "observations": 3022,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50971,
+      "field": "value",
+      "missing_observations": 3,
+      "observations": 3022,
+      "pct_missing": 0.1
+    },
+    {
+      "itemid": 50971,
+      "field": "valuenum",
+      "missing_observations": 3,
+      "observations": 3022,
+      "pct_missing": 0.1
+    },
+    {
+      "itemid": 50971,
+      "field": "valueuom",
+      "missing_observations": 0,
+      "observations": 3022,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50983,
+      "field": "charttime",
+      "missing_observations": 0,
+      "observations": 3007,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50983,
+      "field": "comments",
+      "missing_observations": 2511,
+      "observations": 3007,
+      "pct_missing": 83.51
+    },
+    {
+      "itemid": 50983,
+      "field": "flag",
+      "missing_observations": 2351,
+      "observations": 3007,
+      "pct_missing": 78.18
+    },
+    {
+      "itemid": 50983,
+      "field": "hadm_id",
+      "missing_observations": 558,
+      "observations": 3007,
+      "pct_missing": 18.56
+    },
+    {
+      "itemid": 50983,
+      "field": "itemid",
+      "missing_observations": 0,
+      "observations": 3007,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50983,
+      "field": "labevent_id",
+      "missing_observations": 0,
+      "observations": 3007,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50983,
+      "field": "order_provider_id",
+      "missing_observations": 2674,
+      "observations": 3007,
+      "pct_missing": 88.93
+    },
+    {
+      "itemid": 50983,
+      "field": "priority",
+      "missing_observations": 0,
+      "observations": 3007,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50983,
+      "field": "ref_range_lower",
+      "missing_observations": 0,
+      "observations": 3007,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50983,
+      "field": "ref_range_upper",
+      "missing_observations": 0,
+      "observations": 3007,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50983,
+      "field": "specimen_id",
+      "missing_observations": 0,
+      "observations": 3007,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50983,
+      "field": "storetime",
+      "missing_observations": 0,
+      "observations": 3007,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50983,
+      "field": "subject_id",
+      "missing_observations": 0,
+      "observations": 3007,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50983,
+      "field": "value",
+      "missing_observations": 0,
+      "observations": 3007,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50983,
+      "field": "valuenum",
+      "missing_observations": 0,
+      "observations": 3007,
+      "pct_missing": 0.0
+    },
+    {
+      "itemid": 50983,
+      "field": "valueuom",
+      "missing_observations": 0,
+      "observations": 3007,
+      "pct_missing": 0.0
+    }
+  ],
+  "display_values": [
+    {
+      "itemid": 50912,
+      "masked_display_values": 40,
+      "masked_display_values_with_valid_numeric": 40
+    },
+    {
+      "itemid": 50931,
+      "masked_display_values": 2711,
+      "masked_display_values_with_valid_numeric": 2711
+    },
+    {
+      "itemid": 50971,
+      "masked_display_values": 253,
+      "masked_display_values_with_valid_numeric": 253
+    },
+    {
+      "itemid": 50983,
+      "masked_display_values": 496,
+      "masked_display_values_with_valid_numeric": 496
+    }
+  ],
+  "units": [
+    {
+      "itemid": 50912,
+      "unit": "mg/dL",
+      "observations": 3003,
+      "valid_numeric_observations": 3003,
+      "pct_observations": 100.0
+    },
+    {
+      "itemid": 50931,
+      "unit": "mg/dL",
+      "observations": 2711,
+      "valid_numeric_observations": 2711,
+      "pct_observations": 100.0
+    },
+    {
+      "itemid": 50971,
+      "unit": "mEq/L",
+      "observations": 3022,
+      "valid_numeric_observations": 3019,
+      "pct_observations": 100.0
+    },
+    {
+      "itemid": 50983,
+      "unit": "mEq/L",
+      "observations": 3007,
+      "valid_numeric_observations": 3007,
+      "pct_observations": 100.0
+    }
+  ],
+  "reference_ranges": [
+    {
+      "itemid": 50912,
+      "unit": "mg/dL",
+      "lower_bound": 0.5,
+      "upper_bound": 1.2,
+      "range_status": "complete and ordered",
+      "observations": 1687,
+      "valid_numeric_observations": 1687
+    },
+    {
+      "itemid": 50912,
+      "unit": "mg/dL",
+      "lower_bound": 0.4,
+      "upper_bound": 1.1,
+      "range_status": "complete and ordered",
+      "observations": 1316,
+      "valid_numeric_observations": 1316
+    },
+    {
+      "itemid": 50931,
+      "unit": "mg/dL",
+      "lower_bound": 70.0,
+      "upper_bound": 100.0,
+      "range_status": "complete and ordered",
+      "observations": 2711,
+      "valid_numeric_observations": 2711
+    },
+    {
+      "itemid": 50971,
+      "unit": "mEq/L",
+      "lower_bound": 3.3,
+      "upper_bound": 5.1,
+      "range_status": "complete and ordered",
+      "observations": 2755,
+      "valid_numeric_observations": 2752
+    },
+    {
+      "itemid": 50971,
+      "unit": "mEq/L",
+      "lower_bound": 3.5,
+      "upper_bound": 5.4,
+      "range_status": "complete and ordered",
+      "observations": 267,
+      "valid_numeric_observations": 267
+    },
+    {
+      "itemid": 50983,
+      "unit": "mEq/L",
+      "lower_bound": 133.0,
+      "upper_bound": 145.0,
+      "range_status": "complete and ordered",
+      "observations": 2501,
+      "valid_numeric_observations": 2501
+    },
+    {
+      "itemid": 50983,
+      "unit": "mEq/L",
+      "lower_bound": 135.0,
+      "upper_bound": 147.0,
+      "range_status": "complete and ordered",
+      "observations": 506,
+      "valid_numeric_observations": 506
+    }
+  ]
+}

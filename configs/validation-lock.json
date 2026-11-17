@@ -1,0 +1,11 @@
+{
+  "version": "phase4-1.0.0",
+  "registry_version": "mimic-demo-v2.2-labs-1.0.0",
+  "files_sha256": {
+    "configs/validation-registry-v1.json": "10422d7cc63bae55aeadc366902f2e06f6e90d59c4234f03ad412b6c166e0f93",
+    "src/semantic_quality/baseline_validation.py": "dcaeb576e4b9a949663638634c61f85bee043956ff7ad378c35c8710cb275906",
+    "src/semantic_quality/semantic_validation.py": "060edff9e5e76bdaa9c64f7436fbba4f25403296db983ddfe4b5d9461a193cfb",
+    "src/semantic_quality/validation.py": "ce6fc175333953ba82285226ea5820410e4adda86f3992a940415f66374e51b4",
+    "src/semantic_quality/validation_models.py": "675e29579aa5038d6ab2713230e6a16ca956235d45a88d7f94a1e0b69f1b6b28"
+  }
+}

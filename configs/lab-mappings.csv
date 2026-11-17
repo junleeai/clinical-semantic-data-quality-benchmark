@@ -1,0 +1,5 @@
+itemid,analyte,source_unit,canonical_unit,loinc,alternate_unit,alternate_loinc,alternate_factor,swap_itemid,wrong_specimen_loinc
+50912,Creatinine,mg/dL,mg/dL,2160-0,umol/L,14682-9,88.4,50931,2161-8
+50931,Glucose,mg/dL,mg/dL,2345-7,mmol/L,14749-6,0.05551,50912,2350-7
+50971,Potassium,mEq/L,mmol/L,2823-3,mEq/L,2823-3,1,50983,6298-4
+50983,Sodium,mEq/L,mmol/L,2951-2,mEq/L,2951-2,1,50971,2947-0

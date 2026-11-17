@@ -1,0 +1,38 @@
+{
+  "canonical_loinc": {
+    "50912": "2160-0",
+    "50931": "2345-7",
+    "50971": "2823-3",
+    "50983": "2951-2"
+  },
+  "canonical_units": {
+    "50912": "mg/dL",
+    "50931": "mg/dL",
+    "50971": "mmol/L",
+    "50983": "mmol/L"
+  },
+  "dataset": "MIMIC-IV Clinical Database Demo v2.2",
+  "distinct_patients": 100,
+  "doi": "10.13026/dp1f-ex47",
+  "identity": "labevent_id; retain subject_id and specimen_id; keep repeated results.",
+  "numeric_observations": 11740,
+  "numeric_observations_per_itemid": {
+    "50912": 3003,
+    "50931": 2711,
+    "50971": 3019,
+    "50983": 3007
+  },
+  "observations_sha256": "6788d0ad52ed295bcc916d62527b42036dd3f5faa973b4665c2b5b4d62f778f6",
+  "selection": "Four reviewed item IDs and finite valuenum; use the verified source units.",
+  "source_audit_itemids": [
+    50971
+  ],
+  "source_audit_observations": 3,
+  "source_audit_sha256": "8bd1f30d8505b8b6994ebe3264a863217493dec70e42c62bc371f0a536e86700",
+  "source_sha256": {
+    "d_labitems.csv.gz": "72ea5f020469fd24543bd98ab3bd0a4f645a5a4b7802d9d52af20d736f9d76db",
+    "labevents.csv.gz": "d51a4cf1ea63245abe7d544b0d50a928e9ee2ec5eb9a5ce85500aed0bd6c6dfc",
+    "patients.csv.gz": "59dcc6cd8450ddf03ad32cc7d76e41caa4c9633541715987f590c74835cf6fae"
+  },
+  "specimen_assumption": "Serum or plasma for these routine chemistry item mappings; source fluid is Blood."
+}

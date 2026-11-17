@@ -1,0 +1,141 @@
+{
+  "version": "mimic-demo-v2.2-labs-1.0.0",
+  "sources": {
+    "50912": {
+      "analyte": "creatinine",
+      "fluid": "blood",
+      "preferred_specimen": "serum_plasma",
+      "preferred_loinc": "2160-0"
+    },
+    "50931": {
+      "analyte": "glucose",
+      "fluid": "blood",
+      "preferred_specimen": "serum_plasma",
+      "preferred_loinc": "2345-7"
+    },
+    "50971": {
+      "analyte": "potassium",
+      "fluid": "blood",
+      "preferred_specimen": "serum_plasma",
+      "preferred_loinc": "2823-3"
+    },
+    "50983": {
+      "analyte": "sodium",
+      "fluid": "blood",
+      "preferred_specimen": "serum_plasma",
+      "preferred_loinc": "2951-2"
+    }
+  },
+  "terms": {
+    "14682-9": {
+      "analyte": "creatinine",
+      "specimen": "serum_plasma",
+      "quantity": "molar"
+    },
+    "14749-6": {
+      "analyte": "glucose",
+      "specimen": "serum_plasma",
+      "quantity": "molar"
+    },
+    "2160-0": {
+      "analyte": "creatinine",
+      "specimen": "serum_plasma",
+      "quantity": "mass"
+    },
+    "2161-8": {
+      "analyte": "creatinine",
+      "specimen": "urine",
+      "quantity": "mass"
+    },
+    "2339-0": {
+      "analyte": "glucose",
+      "specimen": "whole_blood",
+      "quantity": "mass"
+    },
+    "2345-7": {
+      "analyte": "glucose",
+      "specimen": "serum_plasma",
+      "quantity": "mass"
+    },
+    "2350-7": {
+      "analyte": "glucose",
+      "specimen": "urine",
+      "quantity": "mass"
+    },
+    "2823-3": {
+      "analyte": "potassium",
+      "specimen": "serum_plasma",
+      "quantity": "molar"
+    },
+    "2947-0": {
+      "analyte": "sodium",
+      "specimen": "whole_blood",
+      "quantity": "molar"
+    },
+    "2951-2": {
+      "analyte": "sodium",
+      "specimen": "serum_plasma",
+      "quantity": "molar"
+    },
+    "6298-4": {
+      "analyte": "potassium",
+      "specimen": "whole_blood",
+      "quantity": "molar"
+    }
+  },
+  "quantities": {
+    "mg/dL": "mass",
+    "g/L": "mass",
+    "mmol/L": "molar",
+    "umol/L": "molar",
+    "mEq/L": "charge"
+  },
+  "profiles": {
+    "creatinine": {
+      "unit": "mg/dL",
+      "review_max": 150,
+      "to_canonical": {
+        "mg/dL": 1,
+        "g/L": 100,
+        "umol/L": 0.011312217194570135,
+        "mmol/L": 11.312217194570135
+      }
+    },
+    "glucose": {
+      "unit": "mg/dL",
+      "review_max": 10000,
+      "to_canonical": {
+        "mg/dL": 1,
+        "g/L": 100,
+        "mmol/L": 18.01477211313277,
+        "umol/L": 0.01801477211313277
+      }
+    },
+    "potassium": {
+      "unit": "mmol/L",
+      "review_max": 30,
+      "to_canonical": {
+        "mmol/L": 1,
+        "umol/L": 0.001,
+        "mEq/L": 1
+      }
+    },
+    "sodium": {
+      "unit": "mmol/L",
+      "review_max": 200,
+      "to_canonical": {
+        "mmol/L": 1,
+        "umol/L": 0.001,
+        "mEq/L": 1
+      }
+    }
+  },
+  "provenance": {
+    "source_items": "https://physionet.org/content/mimic-iv-demo/2.2/hosp/d_labitems.csv.gz",
+    "source_mapping_review": "https://github.com/MIT-LCP/mimic-code/blob/main/mimic-iv/mapping/d_labitems_to_loinc.csv",
+    "terms": "https://loinc.org/{code}",
+    "units": "https://ucum.org/ucum",
+    "conversion_factors": "https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2011/DataFiles/BIOPRO_G.htm",
+    "review_limits": "https://github.com/MIT-LCP/mimic-code/blob/main/mimic-iv/concepts/measurement/chemistry.sql"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "bootstrap_replicates_per_anchor": 399,
+  "protocol_config_sha256": "c8d1852359c8e885af99a2b4ec77001809367ac9b21f5b052ab71cae7aeca886",
+  "protocol_version": "phase5-1.0.0",
+  "reference_observations_sha256": "6788d0ad52ed295bcc916d62527b42036dd3f5faa973b4665c2b5b4d62f778f6",
+  "registry_version": "mimic-demo-v2.2-labs-1.0.0",
+  "runs": 93,
+  "source_checksums_verified": true,
+  "unexpected_clean_findings": 0,
+  "validation_lock_sha256": "fa7edb25e0b3d4bf0ab1246208d37d1c23f0cdb31e313938cf62c602bc19f88e",
+  "validation_lock_version": "phase4-1.0.0",
+  "validator_method_tier_runs": 558
+}

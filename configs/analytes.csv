@@ -1,0 +1,5 @@
+itemid,analyte,expected_source_unit
+50931,Glucose,mg/dL
+50912,Creatinine,mg/dL
+50983,Sodium,mEq/L
+50971,Potassium,mEq/L

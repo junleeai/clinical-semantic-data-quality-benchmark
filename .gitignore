@@ -1,0 +1,16 @@
+# All raw, intermediate, and row-level outputs belong under data/.
+/data/
+/tmp/
+/.cache/
+/.venv/
+.pytest_cache/
+__pycache__/
+*.py[cod]
+*.duckdb*
+*.part
+*.tmp
+.DS_Store
+*.egg-info/
+build/
+dist/
+/results/profile-*/
