@@ -8,13 +8,15 @@ Section 4.3 describes attribution for public use of produced works. Sections 4.4
 
 ## Terminology and methods
 
-LOINC content is copyrighted by Regenstrief Institute, Inc. and the LOINC Committee. LOINC® is a registered trademark of Regenstrief Institute, Inc. The official copyright and license notice, including the distribution notice in section 10, is available at the link below. The benchmark uses an attributed selection of term codes and properties. The project registry version identifies the curated subset. The [per-code entries](#loinc-display-names) supply the corresponding display names. [Regenstrief notice and license](https://loinc.org/license#copyright-notice-and-license)
+> This material contains content from LOINC (http://loinc.org). LOINC is copyright © Regenstrief Institute, Inc. and the Logical Observation Identifiers Names and Codes (LOINC) Committee and is available at no cost under the license at http://loinc.org/license. LOINC® is a registered United States trademark of Regenstrief Institute, Inc.
 
-UCUM symbols follow the *Unified Code for Units of Measure*. The specification is maintained by Regenstrief Institute and the UCUM Organization. CDC NHANES documentation supplies the glucose and creatinine conversion factors. [UCUM specification and terms](https://ucum.org/ucum) · [CDC biochemistry documentation](https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2011/DataFiles/BIOPRO_G.htm)
+The curated terminology registry and simulation mapping table use the codes listed in the [LOINC display-name table](#loinc-display-names). [Regenstrief copyright and license, Section 10](https://loinc.org/license#copyright-notice-and-license)
+
+UCUM symbols follow the *Unified Code for Units of Measure*. The specification is maintained by Regenstrief Institute and the UCUM Organization. CDC NHANES documentation supplies the glucose and creatinine conversion factors. [UCUM specification](https://ucum.org/ucum) · [UCUM copyright and license](https://ucum.org/license) · [CDC biochemistry documentation](https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2011/DataFiles/BIOPRO_G.htm)
 
 The MIT Laboratory for Computational Physiology's crosswalk informed the four source mappings. Its chemistry SQL informed the screening thresholds. MIMIC Code is MIT-licensed, copyright 2019 MIT Laboratory for Computational Physiology. The project references the crosswalk and analytical thresholds and carries its own implementation. [MIMIC Code license](https://github.com/MIT-LCP/mimic-code/blob/main/LICENSE) · [Crosswalk](https://github.com/MIT-LCP/mimic-code/blob/main/mimic-iv/mapping/d_labitems_to_loinc.csv) · [Chemistry SQL](https://github.com/MIT-LCP/mimic-code/blob/main/mimic-iv/concepts/measurement/chemistry.sql)
 
-DuckDB, NumPy, Matplotlib, pytest and their dependencies are installed from package distributions with their own licenses. The ODbL and terminology terms apply to their respective data and terminology. The maintainers have yet to select a license for the original project code.
+DuckDB, NumPy, Matplotlib, pytest and their dependencies are installed from package distributions with their own licenses. The project's original code is available under the [MIT License](LICENSE). MIMIC-IV Demo and applicable derivative data remain subject to ODbL. LOINC and UCUM content remain subject to their respective terms.
 
 ### LOINC display names
 
