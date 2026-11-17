@@ -1,0 +1,13 @@
+{
+  "version": "phase5-1.0.0",
+  "scenarios": ["A", "B", "C"],
+  "nonzero_rates": ["0.025", "0.05", "0.15"],
+  "seeds": [42, 13, 19, 23, 29, 31, 37, 43, 47, 53],
+  "zero_seed": 42,
+  "tiers": [1, 2, 3],
+  "batches": 20,
+  "a_control_rate": "0.05",
+  "bootstrap_seed": 17321,
+  "bootstrap_replicates": 399,
+  "bootstrap_anchor_seed": 42
+}
