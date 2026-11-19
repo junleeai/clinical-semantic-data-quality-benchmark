@@ -1,38 +1,58 @@
-# Portfolio and interview materials
+# Portfolio summary and technical discussion
 
-## GitHub repository description
+## Project summary
 
-A reproducible Python and DuckDB benchmark of lab-data validation that measures how simulated unit and mapping errors affect healthcare analytics.
+Lab records can pass structural checks while carrying the wrong unit or a code for the wrong test. This Python, SQL and DuckDB benchmark compares conventional checks with checks that also examine the meaning of the test, specimen and unit.
 
-## Resume bullets
+The reference contains **11,740 numeric observations from 100 patients** in MIMIC-IV Demo v2.2. Errors and feed batches are simulated. Across **90 nonzero runs**, pooled observation recall was **35.24% for conventional checks and 74.60% for semantic checks** when both had the same trusted registry (Tier 3). This is the error-only policy: review findings are excluded. Counts pool repeated runs of the cohort, not distinct patients.
 
-| Target role | Bullet |
+Quarantine did not always improve the analysis. At the 5% unit-error target, median glucose mean distortion fell from **19.85% to 2.34%**, while creatinine distortion rose from **216.07% to 220.11%**. These are medians across ten seeds at Tier 3. Detecting erroneous records and improving the remaining data are different outcomes.
+
+For project direction, review and implementation attribution, see the [development approach](../README.md#development-approach).
+
+## Proposed GitHub metadata
+
+**Description:** Python, SQL and DuckDB benchmark comparing structural and semantic lab-data checks under simulated unit and mapping errors.
+
+**Topics:** `python`, `sql`, `duckdb`, `healthcare-informatics`, `data-quality`.
+
+These are proposed metadata, not a record of applied repository settings.
+
+## Resume options
+
+These alternatives describe project direction and review with Codex assistance.
+
+| Target role | Suggested bullet |
 |---|---|
-| Data Analyst / Analytics Engineer | Built a DuckDB and Python benchmark on 11,740 lab observations, using SQL to quantify when semantic quarantine reduced glucose mean distortion from 19.85% to 2.34% and when it increased creatinine distortion. |
-| Data Engineer | Designed a checksum-verified MIMIC-IV ETL and validation pipeline with frozen references, isolated error manifests, and upstream reconciliation that identified 21,306 simulated omitted observation exposures across 30 runs. |
-| Data Scientist | Designed a 93-run controlled data-quality experiment with paired patient-cluster bootstraps. Semantic rules increased pooled Tier 3 error-only recall from 35.24% to 74.60% under matched evidence. |
+| Data Analyst / Analytics Engineer | Directed and reviewed a Codex-assisted Python, SQL and DuckDB benchmark on 11,740 lab observations; the analysis showed when removing flagged errors improved glucose summaries and worsened creatinine summaries. |
+| Data Engineer | Directed and reviewed a Codex-assisted lab-data benchmark with checksum-verified ingestion, upstream reconciliation and matched inputs for conventional and semantic validation. |
+| Data Scientist | Directed and reviewed a Codex-assisted, 93-run simulated data-quality benchmark; pooled observation recall was 35.24% versus 74.60% under a shared registry and error-only scoring. |
 
 ## Case study
 
-**Problem.** A clinical results feed can pass schema checks while carrying values in the wrong units or codes for the wrong test. Downstream analysts may interpret those values as trustworthy and report a biased mean or an incomplete cohort.
+**Problem.** A wrong code can put a result into the wrong analytical group; a wrong unit label can change how its value is interpreted.
 
-**Method and build.** I acquired three MIMIC-IV Demo v2.2 tables, verified the official checksums, and froze 11,740 numeric results across four lab tests. SQL built the cohort and generated aggregate summaries. Python simulated unit and mapping defects across 90 perturbed runs and three clean controls. Both validators received identical data within each evidence tier. Labels went only to the evaluator, which separated mapping keys from affected rows and resampled whole patients to estimate uncertainty.
+**Comparison.** The pipeline verifies three MIMIC-IV Demo v2.2 tables and freezes the numeric reference. Python injects unit and mapping errors across 90 nonzero runs and three clean controls. SQL builds the cohort and calculates summaries. Both validators receive the same information within each evidence tier. Only the evaluator sees the injected-error labels.
 
-**Results.** With a shared trusted registry, error-only recall rose by 39.36 percentage points. Both methods detected all tested omissions when they had the upstream inventory. This showed that the availability of evidence can matter as much as the choice of validation rules.
+**Results and evidence.** The recall gain under a shared registry was **39.36 percentage points**. Both source-aware methods also identified all **21,306 omitted observation exposures** across 30 omission runs, covering **150 removed mapping entries**. These counts accumulate across runs. Output-only omission recall is undefined because the missing IDs are unavailable. Adding upstream evidence and adding semantic rules are separate changes.
 
-**Failure and implication.** Quarantine improved the glucose mean but made the creatinine mean worse. It removed label-only creatinine errors that pulled the mean downward and left larger upward errors behind. I reproduced that mechanism with an independent DuckDB calculation. The result motivates checking how quarantine changes the surviving errors and cohort, even when every removed record was correctly flagged.
+**Why quarantine failed for creatinine.** At the 5% target with seed 42, the clean mean was **1.542 mg/dL**, the integrated mean **5.021 mg/dL**, and the mean after semantic quarantine **5.085 mg/dL**. The 38 removed rows were correctly flagged label-only errors. Their interpreted values were low, while larger upward errors remained. A separate DuckDB calculation reproduced the mechanism and matched all ten seeds at this target.
 
-## Ten interview questions and answers
+**Scope.** Distortion means the absolute percentage difference from the clean reference mean. This simulated benchmark does not establish performance in production or across other hospitals.
 
-1. **How did you join the source tables?** Lab events carry a source `itemid` and patient `subject_id`. The item joins the lab dictionary and the subject joins the patient table. `labevent_id` stays the observation key, so repeat tests do not get collapsed into one event.
-2. **How does an anti-join find missing observations?** It compares upstream observation IDs to the integrated output and returns upstream IDs with no match. An output-only validator cannot know those identities. Both source-aware arms used the same reconciliation.
-3. **Which checks would you run in a standard quality framework?** Required fields, types, unique IDs, finite values, broad ranges, and referential integrity are useful conventional checks. A valid registry code can still name the wrong analyte. A terminology-aware rule compares the meaning of the source item with the meaning of the target.
-4. **Why can two LOINC codes describe glucose?** Codes can differ in quantity property or specimen system. For example, serum/plasma glucose reported as mass per volume uses a different code from serum/plasma glucose reported as substance amount per volume. The source dictionary's broad blood label leaves some specimen distinctions uncertain.
-5. **How did you normalize units?** I used analyte-specific factors. Creatinine in `umol/L` is divided by 88.4 for `mg/dL`. Sodium and potassium have a one-to-one numerical relationship between `mEq/L` and `mmol/L` because they are monovalent. The analytics consumer interprets the delivered unit to measure the impact of trusting bad metadata.
-6. **What made the comparison fair?** Each pair saw identical corrupted records and identical evidence within a tier. Fixed rules and a registry version were used throughout. The evaluator alone joined findings to the ground truth. The difference at Tier 3 measures the added semantic rules under matched evidence.
-7. **What is the difference between precision and recall here?** Recall asks what fraction of injected errors were detected. Precision asks what fraction of flags were injected errors. Conventional precision in A and B is undefined because it raised no positives. Review-inclusive scoring intentionally counts uncertainty flags in a separate policy.
-8. **Why resample patients instead of rows?** Measurements from one patient can be related, and a few frequently tested patients contribute many rows. Resampling whole patients keeps those relationships intact. Using the same draw across arms makes the contrast paired.
-9. **How do bootstrap intervals differ from seed ranges?** The conditional bootstrap holds the error assignment and batch design fixed while varying which patients are represented in the draw. Different seeds relocate the simulated errors. Both matter, but the intervals and seed ranges answer different questions.
-10. **How did you investigate the surprising result and make it reproducible?** I recomputed creatinine conversions, means, and subtype contributions with independent SQL. At the anchor, quarantine removed 38 low values and kept the large inflating errors. A pre-scoring protocol commit, pinned data and rules, explicit seeds, and byte-for-byte replay make the result inspectable.
+## Technical discussion guide
 
-[Technical report](technical-report.md) · [Results audit](results-audit.md) · [Reproduction record](reproducibility.md)
+These notes explain the implementation and results.
+
+1. **How are the source tables joined?** Lab events carry a source `itemid` and patient `subject_id`. The item joins the lab dictionary and the subject joins the patient table. `labevent_id` stays the observation key, so repeat tests do not collapse into one event.
+2. **How does an anti-join find missing observations?** It compares upstream observation IDs with the integrated output and returns IDs with no match. An output-only validator cannot know those identities. Both source-aware methods use the same reconciliation.
+3. **What do semantic checks add?** Structural checks cover required fields, types, unique IDs, finite values, broad ranges and referential integrity. A valid registry code can still identify the wrong test. Semantic rules compare the meaning of the source item with the meaning of its target code.
+4. **Why can two LOINC codes describe glucose?** Codes can differ in the measured quantity or specimen. Serum/plasma glucose expressed as mass per volume uses a different code from glucose expressed as substance amount per volume. The source dictionary's broad blood label leaves some specimen distinctions uncertain.
+5. **How are units normalized?** The implementation uses analyte-specific factors. Creatinine in `umol/L` is divided by 88.4 for `mg/dL`. Sodium and potassium are monovalent, so `mEq/L` and `mmol/L` have a one-to-one numerical relationship. The downstream consumer trusts the delivered unit, allowing the benchmark to measure the effect of incorrect metadata.
+6. **What makes the comparison fair?** Both methods see identical corrupted records and identical evidence within a tier. Rules and the registry version stay fixed. Only the evaluator joins findings to the injected-error labels. The Tier 3 difference therefore measures the added semantic rules under matched evidence.
+7. **What do precision and recall mean here?** Recall is the fraction of injected errors detected. Precision is the fraction of flagged entities with injected errors. Conventional precision in A and B is undefined because that method raises no positives. Review-inclusive scoring counts review findings under a separate policy.
+8. **Why resample patients instead of rows?** Measurements from one patient can be related. Resampling whole patients within fixed batches keeps those observations together. Using the same draw for both methods makes the comparison paired.
+9. **How do bootstrap intervals differ from seed ranges?** The bootstrap varies the patient composition while holding the batch design and error assignment fixed. Different seeds change where the simulated errors occur. They answer different uncertainty questions.
+10. **How was the creatinine increase checked?** A separate SQL calculation recomputed conversions, means and error-subtype contributions. At the 5% seed-42 anchor, quarantine removed 38 low values while leaving large upward errors. Pinned data and rules, explicit seeds and a recorded byte-for-byte replay make the result inspectable.
+
+[README](../README.md) · [Technical report](technical-report.md) · [Results audit](results-audit.md) · [Reproduction record](reproducibility.md)

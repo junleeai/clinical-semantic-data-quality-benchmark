@@ -1,49 +1,44 @@
-# When Valid Healthcare Data Produces Wrong Analytics: Benchmarking Semantic Data Quality
+# Clinical Semantic Data Quality Benchmark
 
-Lab results can pass schema checks while carrying the wrong unit or clinical code when systems exchange them. I built a benchmark in **Python, SQL, and DuckDB** using **11,740 laboratory observations from 100 patients** in MIMIC-IV Demo v2.2. Under controlled, simulated integration errors, semantic checks raised pooled observation recall from **35.24% to 74.60%** when both methods had the same trusted registry.
+Lab data can have all required fields and valid codes but still describe the wrong test or unit. Codes identify the test, units determine how to interpret its value, and mappings connect incoming test identifiers to clinical codes.
 
-**Research question.** How effectively does semantic validation detect healthcare data integration errors and reduce their impact on downstream analytics compared with conventional data-quality checks?
+This benchmark compares conventional data-quality checks with semantic checks that also examine what the codes and units mean. Across **90 runs with simulated errors**, conventional checks detected **35.24%** of injected observation errors, compared with **74.60%** for semantic checks. These are pooled recall figures with the same trusted registry available to both methods; scoring excludes review-only flags.
 
-- **Terminology helped.** The **39.36 percentage-point** recall gain pools 90 perturbed runs under the error-only scoring policy.
-- **Evidence mattered.** Both methods identified **21,306 omitted observation exposures** and **150 removed mapping entries** once they had the upstream inventory. Output-only validation could not identify which observations disappeared.
-- **Quarantine could make analytics worse.** Mean distortion is the absolute percentage difference from the clean reference mean, summarized here as the median across ten seeds. At a 5% unit-error target, semantic quarantine reduced glucose distortion from **19.85% to 2.34%**. Creatinine distortion rose from **216.07% to 220.11%** because quarantine removed downward errors while larger upward errors remained.
+**Finding erroneous records was not enough to improve every analysis.** Removing flagged rows improved the glucose mean but made the creatinine mean worse in the unit-error experiment. These are controlled simulation results, not findings from a production clinical system.
 
-[Technical report](docs/technical-report.md) · [Creatinine audit](docs/results-audit.md) · [Evaluation protocol](docs/evaluation-protocol.md) · [Portfolio case study and interview guide](docs/portfolio.md)
+## Core technologies
 
-![Error-only observation recall by evidence tier. A and B improve with semantic rules at Tier 3. Both methods find C omissions starting at Tier 2.](results/figures/recall-by-evidence.png)
+**Python · SQL · DuckDB**, with NumPy for numerical work, Matplotlib for figures and pytest for tests.
 
-## What I Built
+[Technical report](docs/technical-report.md) · [Creatinine audit](docs/results-audit.md) · [Evaluation protocol](docs/evaluation-protocol.md) · [Portfolio summary and technical discussion](docs/portfolio.md)
 
-- A [checksum-verified ETL pipeline](src/semantic_quality/ingestion.py) that loads the source tables into DuckDB for reproducible SQL analysis.
-- [Conventional validation](src/semantic_quality/baseline_validation.py) for structure and reconciliation, plus [semantic validation](src/semantic_quality/semantic_validation.py) for analyte, specimen, and unit compatibility.
-- An [experiment evaluator](src/semantic_quality/evaluation.py) that scores detection and measures downstream distortion, with a [paired patient-cluster bootstrap](src/semantic_quality/cluster_bootstrap.py) that resamples whole patients within fixed batches.
+## What the benchmark does
 
-For a quick check, install [uv](https://docs.astral.sh/uv/) and run `uv run --locked python -m pytest -q` from the repository root. The tests use fabricated inputs and can run without downloading MIMIC. [Full reproduction workflow](#reproduce-locally)
+The reference contains **11,740 numeric lab observations from 100 patients** in **MIMIC-IV Clinical Database Demo v2.2**, covering glucose, creatinine, sodium and potassium. Measurements are deidentified clinical observations; errors, batches and error labels are simulated. Three nonnumeric potassium events are retained locally in the source audit. [Dataset and eligibility](docs/dataset-profile.md) · [Reference fingerprint](configs/reference-lock.json)
 
-## Why it matters
+The pipeline has three main parts:
 
-Unit, terminology, and mapping errors can enter a warehouse without breaking schema checks. They can shift cohort counts, change averages, or send investigators looking for clinical explanations for an ETL defect. The benchmark separates detection from analytical recovery and measures what each approach can establish with the available evidence. The same design applies to other data pipelines where identifiers and units carry meaning across systems.
-
-## Dataset and design
-
-The project uses three checksum-verified tables from **MIMIC-IV Clinical Database Demo v2.2**. The frozen reference contains **11,740 numeric observations from 100 patients** across glucose, creatinine, sodium, and potassium. Three nonnumeric potassium events are retained locally in a source audit. The original measurements are deidentified clinical observations. Unit and mapping errors, feed batches, and labels are simulated. [Dataset release](https://doi.org/10.13026/dp1f-ex47) · [Aggregate profile and eligibility](docs/dataset-profile.md) · [Reference fingerprint](configs/reference-lock.json)
+- [Load and verify the data](src/semantic_quality/ingestion.py): check the official file checksums and load three source tables into DuckDB.
+- Compare [conventional checks](src/semantic_quality/baseline_validation.py) for structure, reconciliation and registry membership with [semantic checks](src/semantic_quality/semantic_validation.py) for test identity, specimen, quantity and units. Inputs are identical within each evidence tier.
+- [Evaluate detection and downstream effects](src/semantic_quality/evaluation.py): score the findings and measure how removing flagged rows changes summaries. Only the evaluator receives the simulation labels.
 
 ```mermaid
 flowchart LR
-    raw["PhysioNet v2.2 CSVs"] --> verified["Verify checksums and load DuckDB"]
-    verified --> cohort["Freeze numeric reference"]
-    cohort --> sim["Seeded error injection"]
-    sim --> input["Integrated output and tiered evidence"]
-    sim -.-> labels["Private ground truth"]
-    input --> common["Load one shared evidence object"]
-    common --> baseline["Conventional findings"]
-    common --> semantic["Semantic findings"]
-    baseline --> eval["Evaluate and simulate quarantine"]
-    semantic --> eval
-    labels -.-> eval
-    cohort --> eval
-    eval --> public["Aggregate tables, intervals and figures"]
+    reference["Verified lab reference"] --> errors["Simulated unit and mapping errors"]
+    errors --> checks["Two validators with the same evidence"]
+    errors -.-> truth["Simulation labels"]
+    checks --> evaluate["Evaluate detection and quarantine effects"]
+    truth -.-> evaluate
+    reference --> evaluate
 ```
+
+The [technical report](docs/technical-report.md#experimental-methodology) explains the full design; the [rule catalog](docs/phase-4.md) maps checks to their required evidence.
+
+## Main results
+
+The **39.36 percentage-point recall gain** uses the **Tier 3, error-only** policy. Counts are pooled across repeated runs of the same cohort, not distinct patients or an average of run-level recall.
+
+Both methods receive the same evidence at each tier:
 
 | Evidence tier | Inputs available to both methods |
 |---|---|
@@ -51,31 +46,58 @@ flowchart LR
 | **2 · Source-aware** | Tier 1 plus upstream observation IDs and batch mapping entries |
 | **3 · Registry-aware** | Tier 2 plus a versioned source mapping and LOINC/UCUM registry |
 
-Conventional checks cover structure, types, required values, duplicate IDs, broad numerical screening, upstream reconciliation, and registry membership where available. Semantic checks add analyte, specimen, quantity, and unit relationships. Both arms use the same inputs and reconciliation logic within each tier. Only the evaluator receives the simulation labels. [Rules and evidence fields](docs/phase-4.md)
+At Tier 3, both methods can check registry membership. Semantic rules also check the relationships between the test, specimen, quantity and unit.
 
-## Results
+![Error-only observation recall by evidence tier. Semantic rules improve detection in A and B at Tier 3. Both methods can identify C omissions from Tier 2 onward.](results/figures/recall-by-evidence.png)
 
-Scenarios cover unit and value changes, incorrect mappings, and incomplete mappings. Each nonzero scenario used targets of **2.5%, 5%, and 15%** with **ten seeds per rate**. Three zero-rate controls had no findings. The target rate applies to eligible observations in A and mapping keys in B/C. The realized number of affected observations changes with batch size. [Scenario specification](docs/phase-3.md) · [Run-level realized rates](results/phase-5/runs.csv)
+| Scenario | Conventional observation recall | Semantic observation recall |
+|---|---:|---:|
+| A · Unit and value errors | 0% | 25.18% |
+| B · Incorrect mappings | 0% | 78.14% |
+| C · Incomplete mappings | 100% | 100% |
 
-At Tier 3, error-only observation recall was **25.18%** for unit and value errors and **78.14%** for incorrect mappings under semantic validation. Conventional recall was **0%** in both. In the incorrect-mapping scenario, semantic validation found **143 of 180 mapping entries** under the error-only policy. Counting **37 review-only mapping entries** raised mapping recall to 100% in this simulation. Review findings represent cases for human investigation. Zero false positives were observed under the benchmark conditions. [Observation and mapping counts](results/figures/mapping-and-observation.png) · [Precision, recall, F1 and confusion tables](results/phase-5/detection_summary.csv)
+These are pooled Tier 3, error-only results. Each scenario used **2.5%, 5% and 15% targets**, with **ten seeds per target**. Targets apply to eligible observations in A and mapping keys in B/C, so they do not imply the same fraction of affected observations. Three additional zero-rate controls had no findings. No false positives were observed in the benchmark; this does not estimate production performance.
 
-### Why creatinine got worse
+Two details help interpret the results:
 
-At the 5% target with seed 42, the clean creatinine mean was **1.542 mg/dL**. The integrated mean was **5.021 mg/dL**, and quarantine raised it to **5.085 mg/dL**. The 38 removed rows averaged **0.0197 mg/dL** after interpreting their incorrect labels. Stale-label and value-only rows still carried numbers on the `umol/L` scale with an `mg/dL` label. They stayed in the output, and removing the low values increased the average of the remaining rows. An independent SQL reconstruction reproduced the result in all ten seeds. [Creatinine reconstruction](docs/results-audit.md) · [Failure-case figure](results/figures/creatinine-quarantine.png)
+- **Missing records require upstream evidence.** Across the 30 omission runs, both source-aware methods identified **21,306 omitted observation exposures** and **150 removed mapping entries**. These counts accumulate across repeated runs. Output-only observation recall is undefined for this scenario because the omitted IDs are unavailable.
+- **Errors and reviews are separate.** In B, semantic checks classified **143 of 180 changed mapping entries** as errors and **37** as review-only. Including those reviews raised mapping recall to 100% in this simulation. Reviews identify cases for investigation, rather than confirmed violations.
+
+Paired bootstrap intervals resample whole patients within fixed batches. At the 5% anchor, the recall gain was **25.3 points** in A (95% interval **20.4–28.6**) and **68.5 points** in B (**48.3–80.8**). Intervals hold error assignments fixed; seed variation changes those assignments. [Bootstrap implementation](src/semantic_quality/cluster_bootstrap.py) · [Uncertainty figure](results/figures/recall-uncertainty.png)
+
+[Scenarios and target rates](docs/phase-3.md) · [Run-level realized rates](results/phase-5/runs.csv) · [Detection metrics](results/phase-5/detection_summary.csv) · [Mapping and observation counts](results/figures/mapping-and-observation.png)
+
+## Why quarantine made creatinine worse
+
+Quarantine removes flagged rows; it does not repair their values. In this experiment, removing correctly flagged creatinine errors left a more biased set of values behind.
+
+At the **5% target, seed 42**, the clean creatinine mean was **1.542 mg/dL**. Simulated errors raised it to **5.021 mg/dL**, and semantic quarantine raised it further to **5.085 mg/dL**.
+
+The **38 removed rows** had incorrect unit labels. Interpreting those labels made their mean **0.0197 mg/dL**, far below the integrated mean. Other errors left large numbers on the `umol/L` scale labelled as `mg/dL`. Those inflated values stayed in the output. Removing the low values therefore raised the remaining mean.
+
+A separate SQL reconstruction reproduced the mechanism and matched the results for all ten seeds at this target. [Detailed reconstruction](docs/results-audit.md)
 
 | Relative mean distortion at the 5% target | Integrated | Conventional quarantine | Semantic quarantine |
 |---|---:|---:|---:|
-| Scenario A · Glucose | 19.85% | 19.85% | 2.34% |
-| Scenario A · Creatinine | 216.07% | 216.07% | 220.11% |
-| Scenario B · Potassium | 70.06% | 70.06% | 0.00% |
+| A · Glucose | 19.85% | 19.85% | 2.34% |
+| A · Creatinine | 216.07% | 216.07% | 220.11% |
+| B · Potassium | 70.06% | 70.06% | 0.00% |
 
-Values are the median distortion across ten seeds at Tier 3. Quarantine only removes records. It cannot repair values or recover observations absent from the integrated dataset. [All analytes and stages](results/phase-5/impact_summary.csv) · [Distortion figure](results/phase-5/figures/mean_distortion.png) · [Omission and coverage figure](results/phase-5/figures/omission_retention.png)
+Distortion is the absolute difference from the clean reference mean, divided by that reference mean and expressed as a percentage. Table entries are the median distortion across ten seeds at Tier 3; they are not the seed-42 values above. Quarantine cannot recover observations missing from the integrated dataset.
 
-The conditional bootstrap resamples whole patients within fixed batches. At the 5% anchor, the recall gain was **25.3 points** in A (95% interval **20.4–28.6**) and **68.5 points** in B (**48.3–80.8**). Seed variation answers a different question: how results change when the error assignments change. [Uncertainty figure](results/figures/recall-uncertainty.png)
+The practical finding is that detecting errors and improving an analysis need separate checks. [Creatinine figure](results/figures/creatinine-quarantine.png) · [All analytes and stages](results/phase-5/impact_summary.csv) · [Distortion figure](results/phase-5/figures/mean_distortion.png) · [Omission and coverage](results/phase-5/figures/omission_retention.png)
 
-## Reproduce locally
+## Run and reproduce
 
-Install [uv](https://docs.astral.sh/uv/). From the repository root:
+For a quick check, install [uv](https://docs.astral.sh/uv/) and run this from the repository root:
+
+```sh
+uv run --locked python -m pytest -q
+```
+
+The tests use fabricated inputs and do not require a MIMIC download.
+
+For full reproduction, use the pinned environment and run:
 
 ```sh
 uv sync --locked
@@ -88,22 +110,22 @@ uv run --locked python scripts/portfolio_figures.py
 uv run --locked python -m pytest -q
 ```
 
-The downloader fetches only the three named v2.2 files and verifies them before loading. To use local copies, put the files in `data/raw/` and omit `--download`. The evaluator generates the scenario inputs, runs both validators and produces the aggregate tables and figures. A clean Apple Silicon replay took **164 seconds** for the benchmark step and used about **237 MiB** peak resident memory for that step. [Measured environment and staged commands](docs/reproducibility.md)
+The downloader fetches only the three named v2.2 files and verifies them before loading. To use local copies, place them in `data/raw/` and omit `--download`. The evaluator generates the scenario inputs, runs both validators and writes the aggregate tables and figures. A recorded Apple Silicon replay took **164 seconds** and about **237 MiB** peak resident memory for the benchmark step. [Environment and staged commands](docs/reproducibility.md)
 
-| Location | Purpose |
-|---|---|
-| [src/semantic_quality/](src/semantic_quality/) and [sql/](sql/) | Ingestion, reference snapshots, simulations, validation, evaluation |
-| [configs/](configs/) | Pinned checksums, mappings, terminology registry, and protocol |
-| [tests/](tests/) | Fabricated fixtures and regression tests |
-| [scripts/](scripts/) | Independent results audit and portfolio figures |
-| [results/](results/) | Aggregate tables and figures |
+Code is in [src/semantic_quality/](src/semantic_quality/) and [sql/](sql/), settings and locks in [configs/](configs/), fabricated fixtures in [tests/](tests/), audit and figure scripts in [scripts/](scripts/), and aggregate outputs in [results/](results/).
 
 ## Limitations and next steps
 
-One hospital's 100-patient demo and its four selected analytes limit generalization. Feed batches and error rates are synthetic. Repeated measurements require patient-level resampling. Whole-blood versus serum/plasma can be uncertain from the source label, and no validation tier has an independent original value for checking plausible arithmetic errors. A natural extension is to test a second interface with verified specimen metadata and paired original measurements, then compare quarantine with a separately evaluated repair policy.
+This is one hospital's 100-patient demo and four lab tests. Batches and error assignments are synthetic, so the findings do not establish performance on other hospitals or live interfaces. Repeated measurements require patient-level resampling, and mapping errors can affect multiple observations at once.
+
+The source's broad blood labels leave some specimen distinctions uncertain. None of the validation tiers includes an independent original value for checking plausible conversion errors. A follow-up could use another interface with verified specimen metadata and paired original measurements. Repair would need its own evaluation before being compared with quarantine.
+
+## Development approach
+
+I directed the project, reviewed the Codex-generated work and made project decisions. **Codex wrote most of the implementation code.**
 
 ## Attribution and licensing
 
-Contains information from MIMIC-IV Clinical Database Demo v2.2, Johnson, Bulgarelli, Pollard, Horng, Celi, and Mark (2023), PhysioNet, RRID:SCR_007345, made available under ODbL 1.0. The source data and patient-level derivatives stay in Git-ignored local storage. This repository provides the versioned sources and transformation code needed to regenerate the aggregates. [Dataset citation](https://doi.org/10.13026/dp1f-ex47) · [ODbL 1.0](https://opendatacommons.org/licenses/odbl/1-0/) · [Terminology and external-source notices](NOTICES.md) · [Official LOINC distribution notice](https://loinc.org/license#copyright-notice-and-license)
+Contains information from MIMIC-IV Clinical Database Demo v2.2, Johnson, Bulgarelli, Pollard, Horng, Celi, and Mark (2023), PhysioNet, RRID:SCR_007345, made available under ODbL 1.0. The source data and patient-level derivatives stay in Git-ignored local storage. This repository provides the versioned sources and transformation code needed to regenerate the aggregates. [Dataset citation](https://doi.org/10.13026/dp1f-ex47) · [ODbL 1.0](https://opendatacommons.org/licenses/odbl/1-0/) · [Terminology and external-source notices](NOTICES.md) · [Official LOINC distribution notice](https://loinc.org/license)
 
 The project's original code is available under the [MIT License](LICENSE). The [third-party notices](NOTICES.md) document the separate terms for MIMIC-IV, applicable derivative data, LOINC, and UCUM.
